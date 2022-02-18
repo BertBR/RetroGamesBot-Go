@@ -9,13 +9,13 @@ import (
 )
 
 type Game struct {
-	Active   bool   `json:"active"`
-	Console  string `json:"console"`
-	FileURL  string `json:"file_url"`
-	Genre    string `json:"genre"`
-	ImageURL string `json:"image_url"`
-	Sorted   int64  `json:"sorted"`
-	Title    string `json:"title"`
+	Active   bool   `firestore:"active"`
+	Console  string `firestore:"console"`
+	FileURL  string `firestore:"file_url"`
+	Genre    string `firestore:"genre"`
+	ImageURL string `firestore:"image_url"`
+	Sorted   int64  `firestore:"sorted"`
+	Title    string `firestore:"title"`
 }
 
 var f *firestore.Client

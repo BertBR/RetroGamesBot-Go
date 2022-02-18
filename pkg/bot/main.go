@@ -34,7 +34,7 @@ func New() {
 
 	b.Handle("/games", func(c tb.Context) error {
 		msg := handleTopGames(c.Message().Sender.FirstName)
-		return c.Reply(msg)
+		return c.Reply(msg, &tb.SendOptions{ParseMode: tb.ModeMarkdown, DisableWebPagePreview: true})
 	})
 
 	b.Start()

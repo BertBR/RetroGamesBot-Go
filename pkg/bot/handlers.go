@@ -15,12 +15,11 @@ func handleTopGames(sender string) string {
 	snap := database.LoadGames(context.Background())
 	var g database.Game
 	for i, v := range snap {
-		fmt.Println(v.Data())
 		err := v.DataTo(&g)
 		if err != nil {
 			panic(err)
 		}
-		fmt.Fprintf(&sb, "%s [%q](%q) - %q\n", numbers[i], g.Title, g.FileURL, g.Sorted)
+		fmt.Fprintf(&sb, "%s [%s](%s) - %d\n", numbers[i], g.Title, g.FileURL, g.Sorted)
 	}
 
 	return fmt.Sprintf("Olá %s\nAqui está a lista dos TOP 10 games mais sorteados!\n\n%s", sender, sb.String())

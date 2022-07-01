@@ -28,13 +28,20 @@ func New() {
 		log.Fatalln(err)
 	}
 
+	fmt.Printf("Bot started at: %s%s", webhook.Endpoint.PublicURL, webhook.Listen)
+
 	b.Handle("/start", func(c tb.Context) error {
 		return c.Reply(fmt.Sprintf("Welcome, %s !!!", c.Message().Sender.FirstName))
 	})
 
 	b.Handle("/games", func(c tb.Context) error {
-		msg := handleTopGames(c.Message().Sender.FirstName)
-		return c.Reply(msg, &tb.SendOptions{ParseMode: tb.ModeMarkdown, DisableWebPagePreview: true})
+
+		// msg := game.TopGames()
+		// b, err := json.Marshal(msg)
+		if err != nil {
+			log.Println(err)
+		}
+		return c.Reply("b")
 	})
 
 	b.Start()

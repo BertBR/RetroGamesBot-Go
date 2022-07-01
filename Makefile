@@ -1,5 +1,8 @@
-local:
-	npx localtunnel --port 3000 --subdomain retrogames&
-	
-dev: local
-	cd pkg && air
+start: ensure
+	air
+
+ensure:
+	bash -x scripts/ensure.sh
+
+dev: ensure
+	docker-compose up -d --build

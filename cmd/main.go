@@ -9,13 +9,7 @@ import (
 	"github.com/BertBR/RetroGamesBot-Go/cmd/bot"
 	"github.com/BertBR/RetroGamesBot-Go/cmd/service"
 	"github.com/jackc/pgx/v4/pgxpool"
-
-	"github.com/joho/godotenv"
 )
-
-func init() {
-	loadEnv()
-}
 
 func main() {
 	err := run()
@@ -45,13 +39,4 @@ func run() error {
 	fmt.Println(top10Genre)
 	fmt.Println(top10Console)
 	return nil
-}
-
-func loadEnv() {
-
-	err := godotenv.Load(".env")
-
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
 }

@@ -1,0 +1,8 @@
+version: 1
+packages:
+  - path: 'pkg/storage/postgres'
+    name: 'postgres'
+    sql_package: 'pgx/v4'
+    engine: 'postgresql'
+    schema: 'pkg/storage/postgres/migrations/'
+    queries: 'pkg/storage/postgres/queries/'

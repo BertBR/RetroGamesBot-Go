@@ -1,0 +1,3 @@
+{{ $numbers := .Numbers}}
+{{ range $index, $data := .Data}}
+{{index $numbers $index}} {{$data.Console}} - {{$data.Sum}}{{end}}

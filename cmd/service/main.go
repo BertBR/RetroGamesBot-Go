@@ -2,8 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
-	"strings"
 
 	"github.com/BertBR/RetroGamesBot-Go/pkg/storage/postgres"
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -19,26 +17,26 @@ func New(pool *pgxpool.Pool) *Service {
 	}
 }
 
-func (svc *Service) GetTop10Console(ctx context.Context) (string, error) {
-	sb := strings.Builder{}
+func (svc *Service) GetTop10Console(ctx context.Context) ([]postgres.GetTotalSortedByConsoleRow, error) {
 	top10Console, err := svc.queries.GetTotalSortedByConsole(ctx)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	for _, row := range top10Console {
-		sb.WriteString(fmt.Sprintf("%s: %d\n", row.Console, row.Sum))
-	}
-	return sb.String(), nil
+	return top10Console, nil
 }
 
-func (svc *Service) GetTop10Genre(ctx context.Context) (string, error) {
-	sb := strings.Builder{}
+func (svc *Service) GetTop10Genre(ctx context.Context) ([]postgres.GetTotalSortedByGenreRow, error) {
 	top10Console, err := svc.queries.GetTotalSortedByGenre(ctx)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	for _, row := range top10Console {
-		sb.WriteString(fmt.Sprintf("%s: %d\n", row.Genre, row.Sum))
+	return top10Console, nil
+}
+
+func (svc *Service) GetTop10Games(ctx context.Context) ([]postgres.GetTop10GamesRow, error) {
+	top10Games, err := svc.queries.GetTop10Games(ctx)
+	if err != nil {
+		return nil, err
 	}
-	return sb.String(), nil
+	return top10Games, nil
 }

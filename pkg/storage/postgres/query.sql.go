@@ -51,6 +51,70 @@ func (q *Queries) GetTop10Games(ctx context.Context) ([]GetTop10GamesRow, error)
 	return items, nil
 }
 
+const getTotalGames = `-- name: GetTotalGames :many
+SELECT
+    count(*) AS "count"
+FROM
+    "public"."games"
+`
+
+func (q *Queries) GetTotalGames(ctx context.Context) ([]int64, error) {
+	rows, err := q.db.Query(ctx, getTotalGames)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int64
+	for rows.Next() {
+		var count int64
+		if err := rows.Scan(&count); err != nil {
+			return nil, err
+		}
+		items = append(items, count)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getTotalGamesByConsole = `-- name: GetTotalGamesByConsole :many
+SELECT
+    console,
+    count(*) AS "sum"
+FROM
+    "public"."games"
+GROUP BY
+    "console"
+ORDER BY
+    "sum" DESC
+`
+
+type GetTotalGamesByConsoleRow struct {
+	Console string
+	Sum     int64
+}
+
+func (q *Queries) GetTotalGamesByConsole(ctx context.Context) ([]GetTotalGamesByConsoleRow, error) {
+	rows, err := q.db.Query(ctx, getTotalGamesByConsole)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetTotalGamesByConsoleRow
+	for rows.Next() {
+		var i GetTotalGamesByConsoleRow
+		if err := rows.Scan(&i.Console, &i.Sum); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getTotalSortedByConsole = `-- name: GetTotalSortedByConsole :many
 SELECT
     "console",

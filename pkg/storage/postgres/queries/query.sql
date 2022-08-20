@@ -39,3 +39,20 @@ ORDER BY
     "title" ASC
 LIMIT 10;
 
+-- name: GetTotalGames :many
+SELECT
+    count(*) AS "count"
+FROM
+    "public"."games";
+
+-- name: GetTotalGamesByConsole :many
+SELECT
+    console,
+    count(*) AS "sum"
+FROM
+    "public"."games"
+GROUP BY
+    "console"
+ORDER BY
+    "sum" DESC;
+

@@ -40,3 +40,19 @@ func (svc *Service) GetTop10Games(ctx context.Context) ([]postgres.GetTop10Games
 	}
 	return top10Games, nil
 }
+
+func (svc *Service) GetTotalGames(ctx context.Context) ([]int64, error) {
+	totalGames, err := svc.queries.GetTotalGames(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return totalGames, nil
+}
+
+func (svc *Service) GetTotalGamesByConsole(ctx context.Context) ([]postgres.GetTotalGamesByConsoleRow, error) {
+	totalGamesByConsole, err := svc.queries.GetTotalGamesByConsole(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return totalGamesByConsole, nil
+}

@@ -1,3 +1,4 @@
-{{ $numbers := .Numbers}}
+Olá {{.Name}}
+Aqui está a lista dos TOP 10 gêneros mais sorteados!{{ $numbers := .Numbers}}
 {{ range $index, $data := .Data}}
 {{index $numbers $index}} {{$data.Genre}} - {{$data.Sum}}{{end}}

@@ -1,3 +1,4 @@
-{{ $numbers := .Numbers}}
+Olá {{.Name}}
+Aqui está a lista dos TOP 10 games mais sorteados! {{ $numbers := .Numbers}}
 {{ range $index, $data := .Data}}
 {{index $numbers $index}} [{{$data.Title}}]({{$data.ImageUrl}}) - {{$data.Sum}}{{end}}

@@ -1,0 +1,4 @@
+Olá {{.Name}}
+Total de {{.Data.Total}} jogos cadastrados na base!
+{{range $data := .Data.Data}}
+{{$data.Console}} - {{$data.Sum}}{{end}}

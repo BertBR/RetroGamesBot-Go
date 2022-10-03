@@ -56,3 +56,21 @@ func (svc *Service) GetTotalGamesByConsole(ctx context.Context) ([]postgres.GetT
 	}
 	return totalGamesByConsole, nil
 }
+
+func (svc *Service) GetThreeRandomGamesRow(ctx context.Context) ([]postgres.GetThreeRandomGamesRow, error) {
+	threeRandomGames, err := svc.queries.GetThreeRandomGames(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return threeRandomGames, nil
+}
+
+func (svc *Service) UpdateSortedGames(ctx context.Context, id []int32) error {
+	for _, v := range id {
+		err := svc.queries.UpdateSortedGame(ctx, v)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}

@@ -7,16 +7,18 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"text/template"
 
 	"github.com/BertBR/RetroGamesBot-Go/cmd/service"
 	"github.com/BertBR/RetroGamesBot-Go/pkg/storage/postgres"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/robfig/cron/v3"
 	tb "gopkg.in/telebot.v3"
 )
 
 var (
-	//go:embed templates/*.html
+	//go:embed templates
 	files embed.FS
 	t     = map[string]string{
 		"/count":    "templates/totalGames.html",
@@ -30,6 +32,10 @@ func New(pool *pgxpool.Pool) {
 	webhookUrl := os.Getenv("WEBHOOK_URL")
 	botToken := os.Getenv("BOT_TOKEN")
 	port := os.Getenv("PORT")
+	chatId, err := strconv.ParseInt(os.Getenv("CHAT_ID"), 10, 32)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	webhook := &tb.Webhook{
 		Listen:   ":" + port,
@@ -46,7 +52,55 @@ func New(pool *pgxpool.Pool) {
 		log.Fatalln(err)
 	}
 
-	fmt.Printf("Bot started at: %s%s", webhook.Endpoint.PublicURL, webhook.Listen)
+	fmt.Printf("Bot started at: %s%s\n", webhook.Endpoint.PublicURL, webhook.Listen)
+
+	cr := cron.New()
+	// It runs every saturday at 00:00
+	cr.AddFunc("0 0 * * 6", func() {
+		svc := service.New(pool)
+		ctx := context.Background()
+
+		threeRandomGames, err := svc.GetThreeRandomGamesRow(ctx)
+		if err != nil {
+			log.Fatalln("error getting random three games: ", err)
+		}
+
+		file, err := files.ReadFile("templates/sortThreeRandomGames.html")
+		if err != nil {
+			log.Fatalln("error reading file", err)
+		}
+
+		s, err := parseTemplate(file, "", threeRandomGames)
+		if err != nil {
+			log.Fatalln("error parsing template: ", err)
+		}
+
+		a := tb.Album{
+			&tb.Photo{File: tb.FromURL(threeRandomGames[0].ImageUrl), Caption: s},
+			&tb.Photo{File: tb.FromURL(threeRandomGames[1].ImageUrl)},
+			&tb.Photo{File: tb.FromURL(threeRandomGames[2].ImageUrl)},
+		}
+		chatId, err := b.ChatByID(chatId)
+		if err != nil {
+			log.Fatalln("error getting chat ID: ", err)
+		}
+		msgs, err := b.SendAlbum(chatId, a, tb.ModeMarkdown, tb.NoPreview)
+		if err != nil {
+			log.Fatalln("error sending media album: ", err)
+		}
+		b.Pin(&msgs[0])
+		var ids []int32
+		for _, v := range threeRandomGames {
+			ids = append(ids, v.ID)
+		}
+
+		err = svc.UpdateSortedGames(ctx, ids)
+		if err != nil {
+			log.Fatalln("error updating sorted games: ", err)
+		}
+	})
+
+	cr.Start()
 
 	b.Handle("/start", func(c tb.Context) error {
 		return c.Reply(fmt.Sprintf("Welcome, %s !!!", c.Message().Sender.FirstName))

@@ -6,7 +6,8 @@ CREATE TABLE games (
     file_url varchar(29) NOT NULL,
     image_url varchar(29) NOT NULL,
     sorted integer NOT NULL,
-    active boolean NOT NULL
+    active boolean NOT NULL,
+    lastSortedAt timestamp with time zone,
 );
 
 INSERT INTO games (title, genre, console, file_url, image_url, sorted, active)

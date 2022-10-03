@@ -56,3 +56,12 @@ GROUP BY
 ORDER BY
     "sum" DESC;
 
+-- name: GetThreeRandomGames :many
+SELECT ss.* FROM (SELECT DISTINCT id,title,genre,file_url,image_url FROM games) ss ORDER BY random() LIMIT 3;
+
+-- name: UpdateSortedGame :exec
+UPDATE games 
+      SET 
+      sorted = sorted + 1,
+      lastupdatedat = now()
+   WHERE id = $1;

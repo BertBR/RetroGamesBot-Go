@@ -23,17 +23,6 @@ services:
     ports:
       - 5432:5432
 
-  pg_admin:
-    container_name: pgadmin
-    image: dpage/pgadmin4
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=SuperSecret
-    ports:
-      - 15432:80
-    depends_on:
-      - database
-
 networks:
   default:
     driver: bridge

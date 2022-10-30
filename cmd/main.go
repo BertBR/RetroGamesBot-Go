@@ -12,15 +12,14 @@ import (
 )
 
 func main() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("Error loading .env file")
-		return
+	if os.Getenv("ENV") == "dev" {
+		err := godotenv.Load(".env")
+		if err != nil {
+			log.Fatal("Error loading .env file")
+			return
+		}
 	}
 	pool := run()
-	if err != nil {
-		log.Fatal(err)
-	}
 	bot.New(pool)
 }
 

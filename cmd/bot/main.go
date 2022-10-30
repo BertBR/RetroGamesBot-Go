@@ -18,8 +18,8 @@ import (
 
 var (
 	//go:embed templates
-	files embed.FS
-	templates     = map[string]string{
+	files     embed.FS
+	templates = map[string]string{
 		"/count":    "templates/totalGames.html",
 		"/consoles": "templates/top10Consoles.html",
 		"/genres":   "templates/top10Genres.html",
@@ -31,7 +31,7 @@ func New(pool *pgxpool.Pool) {
 	webhookUrl := os.Getenv("WEBHOOK_URL")
 	botToken := os.Getenv("BOT_TOKEN")
 	port := os.Getenv("PORT")
-	chatId, err := strconv.ParseInt(os.Getenv("CHAT_ID"), 10, 32)
+	chatId, err := strconv.ParseInt(os.Getenv("CHAT_ID"), 10, 64)
 	if err != nil {
 		log.Fatal(err)
 	}

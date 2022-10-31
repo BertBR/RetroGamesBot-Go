@@ -6,6 +6,7 @@
 
 ---
 ### How to Run
+> :warning: Do not use .env to production, use **SECRETS** instead.
 - Set up a bot using [BotFather](https://t.me/BotFather).
 - Create a file named `.env` in the root directory of the project. (use `.env.example` as a template)
 - Run with `make dev`

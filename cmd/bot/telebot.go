@@ -4,12 +4,16 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
+	"strings"
 
 	"github.com/BertBR/RetroGamesBot-Go/cmd/service"
 	"github.com/BertBR/RetroGamesBot-Go/pkg/storage/postgres"
 	"github.com/jackc/pgx/v4/pgxpool"
 	tb "gopkg.in/telebot.v3"
 )
+
+var BOT_NAME = os.Getenv("BOT_NAME")
 
 type Telebot struct {
 	svc *service.Service
@@ -36,7 +40,7 @@ func (t *Telebot) Count(c tb.Context) error {
 		return err
 	}
 
-	file, err := files.ReadFile(templates[c.Message().Text])
+	file, err := files.ReadFile(templates[strings.TrimSuffix(c.Message().Text, BOT_NAME)])
 	if err != nil {
 		log.Fatalln("error reading file", err)
 		return err
@@ -63,7 +67,7 @@ func (t *Telebot) Games(c tb.Context) error {
 	if err != nil {
 		return err
 	}
-	file, err := files.ReadFile(templates[c.Message().Text])
+	file, err := files.ReadFile(templates[strings.TrimSuffix(c.Message().Text, BOT_NAME)])
 	if err != nil {
 		log.Fatalln("error reading file", err)
 		return err
@@ -83,7 +87,7 @@ func (t *Telebot) Consoles(c tb.Context) error {
 	if err != nil {
 		return err
 	}
-	file, err := files.ReadFile(templates[c.Message().Text])
+	file, err := files.ReadFile(templates[strings.TrimSuffix(c.Message().Text, BOT_NAME)])
 	if err != nil {
 		log.Fatalln("error reading file", err)
 		return err
@@ -103,7 +107,7 @@ func (t *Telebot) Genres(c tb.Context) error {
 	if err != nil {
 		return err
 	}
-	file, err := files.ReadFile(templates[c.Message().Text])
+	file, err := files.ReadFile(templates[strings.TrimSuffix(c.Message().Text, BOT_NAME)])
 	if err != nil {
 		log.Fatalln("error reading file", err)
 		return err

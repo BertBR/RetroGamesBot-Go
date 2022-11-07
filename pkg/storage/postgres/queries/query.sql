@@ -62,6 +62,5 @@ SELECT ss.* FROM (SELECT DISTINCT id,title,genre,file_url,image_url FROM games) 
 -- name: UpdateSortedGame :exec
 UPDATE games 
       SET 
-      sorted = sorted + 1,
-      lastupdatedat = now()
+      sorted = sorted + 1
    WHERE id = $1;

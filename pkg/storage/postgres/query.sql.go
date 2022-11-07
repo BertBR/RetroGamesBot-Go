@@ -234,8 +234,7 @@ func (q *Queries) GetTotalSortedByGenre(ctx context.Context) ([]GetTotalSortedBy
 const updateSortedGame = `-- name: UpdateSortedGame :exec
 UPDATE games 
       SET 
-      sorted = sorted + 1,
-      lastupdatedat = now()
+      sorted = sorted + 1
    WHERE id = $1
 `
 

@@ -54,6 +54,12 @@ func New(pool *pgxpool.Pool) {
 		bot.SortThreeRandomGames(svc, b)
 	})
 
+	// Runs every day to perform a fake select on database
+	cr.AddFunc("0 0 * * *", func() {
+		svc := service.New(pool)
+		svc.FakeSelect()
+	})
+
 	cr.Start()
 
 	b.Handle("/start", bot.Start)

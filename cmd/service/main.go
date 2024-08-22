@@ -74,3 +74,12 @@ func (svc *Service) UpdateSortedGames(ctx context.Context, id []int32) error {
 	}
 	return nil
 }
+
+func (svc *Service) FakeSelect() error {
+	ctx := context.Background()
+	_, err := svc.queries.GetTotalGames(ctx)
+	if err != nil {
+		return err
+	}
+	return nil
+}
